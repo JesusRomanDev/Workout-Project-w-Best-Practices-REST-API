@@ -1,9 +1,12 @@
-import {getAllWorkout} from '../database/Workout.js';
+//Pudimos haber creado una carpeta llamada services, esto para separar y no tener el send aqui en el controlador y no
+//en el service, para mas info irnos al video https://www.youtube.com/watch?v=qFmwRriNJWs minuto 23:50 o la pagina de freecodecamp
+//https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/#accept-and-respond-with-data-in-json-format
+import {getAllWorkout, createNewWorkoutDB} from '../database/Workout.js';
+import {randomUUID} from 'node:crypto'
 
 const getAllWorkouts = (req, res) => {
     const allWorkouts = getAllWorkout();
-    return allWorkouts;
-    res.send("Get all workouts");
+    res.send({status: "Ok", data: allWorkouts});
 };
   
 const getOneWorkout = (req, res) => {
@@ -11,7 +14,27 @@ const getOneWorkout = (req, res) => {
 };
   
 const createNewWorkout = (req, res) => {
-    res.send("Create a new workout");
+    const {name, mode, equipment, exercises, trainerTips} = req.body;
+    console.log(name);
+    if (!name || !mode || !equipment || !exercises || !trainerTips){
+        res.status(400).send("One field is empty");
+        return;
+    }
+
+    console.log('Pasaste');
+    const newWorkout = {
+        name: name,
+        mode: mode,
+        equipment: equipment,
+        exercises: exercises,
+        trainerTips: trainerTips,
+        id: randomUUID(),
+        createdAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
+        updatedAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
+    };
+
+  const createdWorkout = createNewWorkoutDB(newWorkout);
+    res.status(201).send({msg: createdWorkout});
 };
   
 const updateOneWorkout = (req, res) => {
