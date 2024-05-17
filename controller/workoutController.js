@@ -1,7 +1,7 @@
 //Pudimos haber creado una carpeta llamada services, esto para separar y no tener el send aqui en el controlador y no
 //en el service, para mas info irnos al video https://www.youtube.com/watch?v=qFmwRriNJWs minuto 23:50 o la pagina de freecodecamp
 //https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/#accept-and-respond-with-data-in-json-format
-import {getAllWorkout, createNewWorkoutDB} from '../database/Workout.js';
+import {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB} from '../database/Workout.js';
 import {randomUUID} from 'node:crypto'
 
 const getAllWorkouts = (req, res) => {
@@ -10,6 +10,13 @@ const getAllWorkouts = (req, res) => {
 };
   
 const getOneWorkout = (req, res) => {
+    const {workoutId} = req.params;
+    console.log(workoutId);
+    if(!workoutId){
+        res.status(400).send("No workout found");
+        return
+    }
+    const oneWorkout = getOneWorkoutDB(workoutId);
     res.send("Get an existing workout");
 };
   

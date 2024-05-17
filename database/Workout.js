@@ -13,17 +13,24 @@ const getAllWorkout = () => {
     return workoutDB.workouts;
 }
 
-const createNewWorkoutDB = (workout) => {
-    //Si retorna menos 1 es que no lo encontro
-    const isAlreadyAdded = DB.workouts.findIndex((workout) => workout.name === newWorkout.name) > -1;
-    if (isAlreadyAdded) {
-        return;
-    }
-
-    workoutDB.workouts.push(workout);
-    console.log(workout);
-    saveToDatabase(workoutDB);
-    return workout;
+const getOneWorkoutDB = (workoutId) => {
+    workoutDB.workouts.filter()
 }
 
-export {getAllWorkout, createNewWorkoutDB};
+const createNewWorkoutDB = (newWorkout) => {
+    //Si retorna menos 1 es que no lo encontro
+    console.log(newWorkout);
+    const isAlreadyAdded = workoutDB.workouts.findIndex((workout) => workout.name === newWorkout.name) > -1;
+    if (isAlreadyAdded) {
+        console.log('Ya se añadio');
+        return;
+    }
+    //Aqui lo pusheamos en memoria, pero aun falta en la DB
+    workoutDB.workouts.push(newWorkout);
+    console.log(newWorkout);
+    //Aqui guardamos en la DB
+    saveToDatabase(workoutDB);
+    return newWorkout;
+}
+
+export {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB};
