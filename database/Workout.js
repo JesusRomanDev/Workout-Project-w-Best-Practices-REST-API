@@ -14,7 +14,13 @@ const getAllWorkout = () => {
 }
 
 const getOneWorkoutDB = (workoutId) => {
-    workoutDB.workouts.filter()
+    const workoutFiltered = workoutDB.workouts.filter((workout) => workout.id === workoutId)
+    if(workoutFiltered.length === 0){
+        const err = [400, "This workout doesn't exist"]
+        return err;
+    }
+    const success = [200, workoutFiltered]
+    return success;
 }
 
 const createNewWorkoutDB = (newWorkout) => {
@@ -33,4 +39,37 @@ const createNewWorkoutDB = (newWorkout) => {
     return newWorkout;
 }
 
-export {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB};
+const updateOneWorkoutDB = (workoutId, updatedWorkout) => {
+    const idExists = workoutDB.workouts.findIndex((workout) => workout.id === workoutId) > -1;
+    if(!idExists){
+        const err = [400, "This workout doesn't exist"]
+        return err;
+    }
+
+    const indexForUpdate = workoutDB.workouts.findIndex(el => el.id === workoutId)
+    console.log(indexForUpdate);
+    const workoutUpdated = {
+        ...workoutDB.workouts[indexForUpdate],
+        ...updatedWorkout,
+        updatedAt: new Date().toLocaleString("en-US", { timeZone: "UTC" })
+    }
+    // console.log(workoutUpdated);
+    //Vaciando la DB original, porque si no, tendriamos la DB original y abajo PUSHEAREMOS LA NUEVA, entonces tendremos
+    //DB repetidas por asi decirlo
+    // workoutDB.workout = 0;
+    //Pusheando la nueva DB 
+    // workoutDB.workouts.push(newDB);
+    workoutDB.workouts[indexForUpdate] = workoutUpdated;
+    saveToDatabase(workoutDB);
+    const success = [200, workoutUpdated];
+    return success;
+}
+
+const deleteWorkoutDB = (workoutId) => {
+    const indexForDelete = workoutDB.workouts.findIndex(el => el.id === workoutId);
+    workoutDB.workouts.splice(indexForDelete, 1);
+    console.log(workoutDB);
+    saveToDatabase(workoutDB);
+}
+
+export {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB, updateOneWorkoutDB, deleteWorkoutDB};

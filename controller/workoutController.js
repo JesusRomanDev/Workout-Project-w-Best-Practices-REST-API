@@ -1,7 +1,7 @@
 //Pudimos haber creado una carpeta llamada services, esto para separar y no tener el send aqui en el controlador y no
 //en el service, para mas info irnos al video https://www.youtube.com/watch?v=qFmwRriNJWs minuto 23:50 o la pagina de freecodecamp
 //https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/#accept-and-respond-with-data-in-json-format
-import {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB} from '../database/Workout.js';
+import {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB, updateOneWorkoutDB, deleteWorkoutDB} from '../database/Workout.js';
 import {randomUUID} from 'node:crypto'
 
 const getAllWorkouts = (req, res) => {
@@ -13,11 +13,12 @@ const getOneWorkout = (req, res) => {
     const {workoutId} = req.params;
     console.log(workoutId);
     if(!workoutId){
-        res.status(400).send("No workout found");
+        res.status(400).send("Please provide a workout id");
         return
     }
     const oneWorkout = getOneWorkoutDB(workoutId);
-    res.send("Get an existing workout");
+    console.log(oneWorkout);
+    res.status(oneWorkout[0]).send({msg: oneWorkout[1]});
 };
   
 const createNewWorkout = (req, res) => {
@@ -45,10 +46,23 @@ const createNewWorkout = (req, res) => {
 };
   
 const updateOneWorkout = (req, res) => {
-    res.send("Update an existing workout");
+    const {workoutId} = req.params;
+    const {body} = req;
+    console.log(workoutId);
+    console.log(body);
+    if(!workoutId){
+        res.status(400).send({msg: "Workout not found"})
+    }
+    const updatedWorkout = updateOneWorkoutDB(workoutId, body);
+    res.status(updatedWorkout[0]).send({msg: updatedWorkout[1]});
 };
   
 const deleteOneWorkout = (req, res) => {
+    const {workoutId} = req.params;
+    if(!workoutId){
+        res.status(200).send("Need Workout ID")
+    }
+    const deletedWorkout = deleteWorkoutDB(workoutId);
     res.send("Delete an existing workout");
 };
 
