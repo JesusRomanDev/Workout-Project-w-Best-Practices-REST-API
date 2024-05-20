@@ -28,15 +28,21 @@ const createNewWorkoutDB = (newWorkout) => {
     console.log(newWorkout);
     const isAlreadyAdded = workoutDB.workouts.findIndex((workout) => workout.name === newWorkout.name) > -1;
     if (isAlreadyAdded) {
-        console.log('Ya se añadio');
-        return;
+        throw({status:200, message: `Workout with the name ${newWorkout.name} already exists`})
+        // return; //comentamos el return porque en el THROW se detiene la ejecucion del codigo en ese punto y el return se
+        //ignora, no tiene sentido dejar ese RETURN;
     }
+    //Añadiendo un try-catch
     //Aqui lo pusheamos en memoria, pero aun falta en la DB
-    workoutDB.workouts.push(newWorkout);
-    console.log(newWorkout);
-    //Aqui guardamos en la DB
-    saveToDatabase(workoutDB);
-    return newWorkout;
+    try {
+        workoutDB.workouts.push(newWorkout);
+        console.log(newWorkout);
+        //Aqui guardamos en la DB
+        saveToDatabase(workoutDB);
+        return newWorkout;
+    } catch (error) {
+        throw ({status:500, message: error?.message || error});
+    }
 }
 
 const updateOneWorkoutDB = (workoutId, updatedWorkout) => {

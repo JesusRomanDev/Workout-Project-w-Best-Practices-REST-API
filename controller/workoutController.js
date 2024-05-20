@@ -5,8 +5,14 @@ import {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB, updateOneWorkoutDB, 
 import {randomUUID} from 'node:crypto'
 
 const getAllWorkouts = (req, res) => {
-    const allWorkouts = getAllWorkout();
-    res.send({status: "Ok", data: allWorkouts});
+    try {
+        const allWorkouts = getAllWorkout();
+        res.send({status: "Ok", data: allWorkouts});
+    } catch (error) {
+        res
+            .status(error?.status || 500)
+            .send({status: "FAILED", data: {error: error?.message || error}})
+    }
 };
   
 const getOneWorkout = (req, res) => {
@@ -45,7 +51,9 @@ const createNewWorkout = (req, res) => {
         const createdWorkout = createNewWorkoutDB(newWorkout);
         res.status(201).send({msg: createdWorkout});
     } catch (error) {
-        throw error;
+        res
+            .status(error?.status || 500)
+            .send({status: 'FAILED', data: {error: error?.message || error}})
     }
 
 };
