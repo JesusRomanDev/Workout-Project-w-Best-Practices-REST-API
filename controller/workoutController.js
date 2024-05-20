@@ -25,7 +25,7 @@ const createNewWorkout = (req, res) => {
     const {name, mode, equipment, exercises, trainerTips} = req.body;
     console.log(name);
     if (!name || !mode || !equipment || !exercises || !trainerTips){
-        res.status(400).send("One field is empty");
+        res.status(400).send({status: "Failed", data: { error: "One of the following keys is missing or is empty in request body: 'name', 'mode', 'equipment', 'exercises', 'trainerTips' "}});
         return;
     }
 
@@ -41,8 +41,13 @@ const createNewWorkout = (req, res) => {
         updatedAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
     };
 
-  const createdWorkout = createNewWorkoutDB(newWorkout);
-    res.status(201).send({msg: createdWorkout});
+    try {
+        const createdWorkout = createNewWorkoutDB(newWorkout);
+        res.status(201).send({msg: createdWorkout});
+    } catch (error) {
+        throw error;
+    }
+
 };
   
 const updateOneWorkout = (req, res) => {
