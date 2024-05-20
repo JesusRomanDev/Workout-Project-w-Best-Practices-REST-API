@@ -4,10 +4,18 @@ import {getAllWorkouts,
     createNewWorkout,
     updateOneWorkout,
     deleteOneWorkout} from '../controller/workoutController.js'
+import { getRecordForWorkout } from "../controller/recordController.js";
 const router = express.Router();
 
 router.route('/').get(getAllWorkouts).post(createNewWorkout);
 router.route('/:workoutId').get(getOneWorkout).patch(updateOneWorkout).delete(deleteOneWorkout)
+
+//Logical Nesting
+//We have a dynamic ID then another endpoint
+//workouts and records on db.json are related, on records the workout property is the id of workouts so they are related
+//So for a certain workout ID there will be a record w all the info(time, member, etc...)
+//Records
+router.route('/:workoutID/records').get(getRecordForWorkout);
 
 // Current implementations (without verbs)
 // GET "/api/v1/workouts" 
