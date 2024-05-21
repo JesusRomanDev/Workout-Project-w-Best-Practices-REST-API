@@ -1,5 +1,6 @@
 import express from "express";
 import appRouter from './routes/workoutRoutes.js';
+import { swaggerDocs } from "./docs/swagger.js";
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -14,4 +15,7 @@ app.use('/api/workouts', appRouter); //Name Resources in Plural for our endpoint
 
 app.listen(PORT, () =>{
     console.log(`Escuchando desde el puerto ${PORT}`);
+    swaggerDocs(app, PORT);
 }); 
+
+//Guide:https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/#accept-and-respond-with-data-in-json-format
