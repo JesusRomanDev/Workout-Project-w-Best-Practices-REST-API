@@ -9,8 +9,37 @@ const workoutDB = require('./db.json'); //Import database, we did this to avoid 
 // //needs an import assertion of type "json"
 import { saveToDatabase } from './utils.js';
 
-const getAllWorkout = () => {
-    return workoutDB.workouts;
+const getAllWorkout = (filterParams) => {
+    //Adding a variable to make it cleaner
+    const workouts = workoutDB.workouts;
+    //Si especifican un mode
+    if(filterParams.mode){
+        return workouts.filter(el => {
+            return el.mode.toLowerCase().includes(filterParams.mode)
+        })
+    }
+
+    //Retornando el lenght
+    if(filterParams.length){
+        return workouts.slice(0, parseInt(filterParams.length))
+    }
+    
+    //Esta anidado por eso usamos 2 metodos de array
+    if(filterParams.equipment){
+        return workouts.filter(el => Object.entries(el.equipment).some(([key, value]) => value === filterParams.equipment))
+    }
+
+    //Sort the workouts in response in descending order by their creatin date
+    //Plus if contains lenght
+    if(filterParams.sort){
+        if(filterParams.sort && filterParams.length) return workouts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, parseInt(filterParams.length));
+        return workouts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    //Si no lo hubieramos pasado como objeto en el controller
+    // if(!filterParams){
+    //     console.log('aqui');
+    // }
+    return workouts;
 }
 
 const getOneWorkoutDB = (workoutId) => {

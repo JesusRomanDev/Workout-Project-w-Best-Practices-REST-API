@@ -5,8 +5,13 @@ import {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB, updateOneWorkoutDB, 
 import {randomUUID} from 'node:crypto'
 
 const getAllWorkouts = (req, res) => {
+    //Query params
+    const {mode, length, equipment, sort} = req.query;
+    // console.log(equipment);
+    //You can try it further with adding "for%20time" as the value for the "mode" parameter (remember --> "%20" means "whitespace")
+    //d and you should receive all workouts that have the mode "For Time" if there are any stored.
     try {
-        const allWorkouts = getAllWorkout();
+        const allWorkouts = getAllWorkout({mode, length, equipment, sort});
         res.send({status: "Ok", data: allWorkouts});
     } catch (error) {
         res
