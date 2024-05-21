@@ -12,7 +12,7 @@ const router = express.Router();
 const cache = apicache.middleware;
 
 //cache vas used as a parameter in our router, after the patch ('/') and before our controller
-router.route('/').get(getAllWorkouts).post(createNewWorkout);
+router.route('/', cache("2 minutes")).get(getAllWorkouts).post(createNewWorkout);
 router.route('/:workoutId').get(getOneWorkout).patch(updateOneWorkout).delete(deleteOneWorkout)
 
 //Logical Nesting
