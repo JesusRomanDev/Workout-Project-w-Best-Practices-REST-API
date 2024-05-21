@@ -1,4 +1,6 @@
 import express from "express";
+//Use data caching for performance improvements USING APICACHE PACKAGE
+import apicache from 'apicache';
 import {getAllWorkouts, 
     getOneWorkout,
     createNewWorkout,
@@ -6,7 +8,10 @@ import {getAllWorkouts,
     deleteOneWorkout} from '../controller/workoutController.js'
 import { getRecordForWorkout } from "../controller/recordController.js";
 const router = express.Router();
+//Using apicache
+const cache = apicache.middleware;
 
+//cache vas used as a parameter in our router, after the patch ('/') and before our controller
 router.route('/').get(getAllWorkouts).post(createNewWorkout);
 router.route('/:workoutId').get(getOneWorkout).patch(updateOneWorkout).delete(deleteOneWorkout)
 
