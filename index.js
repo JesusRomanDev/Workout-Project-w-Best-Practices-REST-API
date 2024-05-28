@@ -5,8 +5,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 //Adding Body Parser before routes/endpoints
-app.use(express.json());
-
+// app.use(express.json());
+app.use(express.urlencoded({extended: true}))
 //workouts it's our resource name
 app.use('/api/workouts', appRouter); //Name Resources in Plural for our endpoint
 //Avoid verbs in endpoint names

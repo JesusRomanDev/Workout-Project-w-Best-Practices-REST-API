@@ -5,6 +5,9 @@ import {getAllWorkout, createNewWorkoutDB, getOneWorkoutDB, updateOneWorkoutDB, 
 import {randomUUID} from 'node:crypto'
 
 const getAllWorkouts = (req, res) => {
+    // res.setHeader('Content-Type', 'application/xml').send({msg: "HOLA"})
+    // res.send('<p>Hola puto</p>')
+    // return;
     //Query params
     const {mode, length, equipment, sort} = req.query;
     // console.log(equipment);
@@ -34,7 +37,7 @@ const getOneWorkout = (req, res) => {
   
 const createNewWorkout = (req, res) => {
     const {name, mode, equipment, exercises, trainerTips} = req.body;
-    console.log(name);
+    console.log(req.body);
     if (!name || !mode || !equipment || !exercises || !trainerTips){
         res.status(400).send({status: "Failed", data: { error: "One of the following keys is missing or is empty in request body: 'name', 'mode', 'equipment', 'exercises', 'trainerTips' "}});
         return;
